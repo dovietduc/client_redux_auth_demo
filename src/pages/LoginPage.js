@@ -1,9 +1,22 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 
 
 function LoginPage() {
+
+	const [userInput, setUserInput] = useState({
+		email: '',
+		password: ''
+	})
+
+	const handleChangeInput = (event) => {
+		setUserInput({
+			...userInput,
+			[event.target.name]: event.target.value
+		});
+	}
+
     return (
         <div className="login-page">
             <div className="login-box">
@@ -25,6 +38,9 @@ function LoginPage() {
                                     type="email"
                                     className="form-control"
                                     placeholder="Email"
+									value={userInput.email}
+									name="email"
+									onChange={handleChangeInput}
                                 />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
@@ -38,6 +54,9 @@ function LoginPage() {
                                     type="password"
                                     className="form-control"
                                     placeholder="Password"
+									value={userInput.password}
+									name="password"
+									onChange={handleChangeInput}
                                 />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
