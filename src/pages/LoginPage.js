@@ -1,9 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import jwtdecode from 'jwt-decode';
 
 
 
 function LoginPage() {
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const [userInput, setUserInput] = useState({
 		email: '',
@@ -15,6 +21,34 @@ function LoginPage() {
 			...userInput,
 			[event.target.name]: event.target.value
 		});
+	}
+
+	const handleSubmitLogin = async (event) => {
+		event.preventDefault();
+		// 1. call api login
+		const response = await axios.post('http://localhost:5000/api/auth/login', userInput);
+
+		// 2. save user login to store
+		if(response.status === 200) {
+			const accessToken = response.data.accessToken;
+			const userLogin = jwtdecode(accessToken);
+			dispatch({
+				type: 'LOGIN_SUCCESS',
+				payload: userLogin
+			})
+
+			// 3. save jwt to local storage
+			localStorage.setItem('accessToken', accessToken);
+
+			// 4. navigate to admin page or home page
+			if(userLogin.role === 'admin') {
+				navigate('/admin');
+			} else {
+				// redirect to home page
+			}
+			
+		}
+		
 	}
 
     return (
@@ -31,7 +65,7 @@ function LoginPage() {
                             Sign in to start your session
                         </p>
 
-                        <form>
+                        <form onSubmit={handleSubmitLogin}>
                             <div className="input-group mb-3">
                                 <input
                                     id="email"
