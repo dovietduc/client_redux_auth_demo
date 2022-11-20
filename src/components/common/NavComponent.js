@@ -1,6 +1,10 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 function NavComponent() {
+
+    const authState = useSelector(state => state.auth);
+
     return (
         <nav className="main-header navbar navbar-expand navbar-white navbar-light">
             <ul className="navbar-nav">
@@ -12,7 +16,7 @@ function NavComponent() {
             </ul>
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item mr-3">
-                    <a className="btn btn-success">Admin</a>
+                    <a className="btn btn-success">{ authState.user.username }</a>
                 </li>
             </ul>
         </nav>

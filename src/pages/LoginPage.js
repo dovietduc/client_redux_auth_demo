@@ -26,7 +26,7 @@ function LoginPage() {
 	const handleSubmitLogin = async (event) => {
 		event.preventDefault();
 		// 1. call api login
-		const response = await axios.post('http://localhost:5000/api/auth/login', userInput);
+		const response = await axios.post('api/auth/login', userInput);
 
 		// 2. save user login to store
 		if(response.status === 200) {
