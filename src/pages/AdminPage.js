@@ -1,7 +1,33 @@
-import React from 'react';
+import axios from 'axios';
+import { useEffect } from 'react';
 import AdminLayout from '../layouts/AdminLayout';
+import { useDispatch, useSelector } from 'react-redux';
+
+// 1. call api get list user
+// 2. save list user to store -> store state change -> rerender app
 
 function AdminPage() {
+
+    const dispatch = useDispatch();
+    const users = useSelector(function(state){
+        return state.user;
+    });
+
+    useEffect(() => {
+        async function getistUser() {
+            const response = await axios.get('/auth/admin/user');
+            // save list user to store
+            dispatch({
+                type: 'GET_USER_LIST',
+                payload: response.data
+            })
+
+        }
+
+        getistUser();
+
+    }, [])
+
     return (
         <AdminLayout>
             <div className="content-wrapper">
@@ -43,17 +69,28 @@ function AdminPage() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>183</td>
-                                                    <td>test</td>
-                                                    <td>regular</td>
-                                                    <td>test@gmail.com</td>
-                                                    <td>
-                                                        <button className="btn btn-danger">
-                                                            Delete
-                                                        </button>
-                                                    </td>
-                                                </tr>
+
+                                            { 
+                                                users.map(function(user){
+                                                    return (
+                                                        <tr key={user._id}>
+                                                            <td>{user._id}</td>
+                                                            <td>{user.username}</td>
+                                                            <td>{user.role}</td>
+                                                            <td>{user.emai}</td>
+                                                            <td>
+                                                                <button className="btn btn-danger">
+                                                                    Delete
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            
+                                            }
+                                               
+
+
                                             </tbody>
                                         </table>
                                     </div>
