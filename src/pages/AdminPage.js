@@ -28,6 +28,13 @@ function AdminPage() {
 
     }, [])
 
+    const handleDelete = async (idUser) => {
+        // 1. call api delete user
+        const response = await axios.delete(`/auth/admin/user/delete/${idUser}`);
+        console.log('response', response);
+
+    }
+
     return (
         <AdminLayout>
             <div className="content-wrapper">
@@ -79,7 +86,7 @@ function AdminPage() {
                                                             <td>{user.role}</td>
                                                             <td>{user.emai}</td>
                                                             <td>
-                                                                <button className="btn btn-danger">
+                                                                <button onClick={() => handleDelete(user._id)} className="btn btn-danger">
                                                                     Delete
                                                                 </button>
                                                             </td>
